@@ -34,6 +34,9 @@ dependencies {
     kapt dagger.compiler
     implementation dagger.library
 
+    implementation rx.java
+    implementation rx.android
+
     implementation network.retrofit.library
     implementation network.retrofit.gson
     implementation network.retrofit.rxAdapter
