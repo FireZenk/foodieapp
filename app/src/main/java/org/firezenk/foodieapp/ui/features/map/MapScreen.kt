@@ -2,7 +2,6 @@ package org.firezenk.foodieapp.ui.features.map
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import org.firezenk.foodieapp.App
 import org.firezenk.foodieapp.App.Companion.component
 import org.firezenk.foodieapp.R
 import org.firezenk.foodieapp.ui.features.commons.Screen
