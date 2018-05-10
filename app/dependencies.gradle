@@ -1,0 +1,115 @@
+ext {
+    minSdk = 19
+    targetSdk = 27
+    compileSdk = 27
+
+    appPackage = "org.firezenk.foodieapp"
+    testRunner = "org.firezenk.foodieapp.DexOpenerAndroidJUnitRunner"
+
+    appCode = 1
+    appName = "1.0.0"
+
+    kotlin = "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // Support
+    def supportVersion = "27.0.2"
+    def supportConstraintVersion = "1.1.0-beta6"
+    support = [
+            appcompat : "com.android.support:appcompat-v7:$supportVersion",
+            design    : "com.android.support:design:$supportVersion",
+            constraint: "com.android.support.constraint:constraint-layout:$supportConstraintVersion",
+    ]
+
+    def daggerVersion = "2.14.1"
+    dagger = [
+            compiler: "com.google.dagger:dagger-compiler:$daggerVersion",
+            library : "com.google.dagger:dagger:$daggerVersion",
+    ]
+
+    def rxJavaVersion = "2.1.8"
+    rx = [
+            java   : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
+            android: "io.reactivex.rxjava2:rxandroid:2.0.1"
+    ]
+
+    def retrofitVersion = "2.3.0"
+    def okHttpVersion = "3.9.1"
+    def glideVersion = "4.6.1"
+    network = [
+            retrofit: [
+                    library  : "com.squareup.retrofit2:retrofit:$retrofitVersion",
+                    rxAdapter: "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
+                    gson     : "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+            ],
+
+            okhttp  : [
+                    library: "com.squareup.okhttp3:okhttp:$okHttpVersion",
+                    logging: "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
+            ],
+
+            glide   : [
+                    library : "com.github.bumptech.glide:glide:$glideVersion",
+                    compiler: "com.github.bumptech.glide:compiler:$glideVersion",
+            ]
+    ]
+
+    def espressoVersion = "1.0.1"
+    testing = [
+            jUnit    : "junit:junit:4.12",
+            dexOpener: "com.github.tmurakami:dexopener:0.12.1",
+            espresso : [
+                    core   : "com.android.support.test.espresso:espresso-core:3.0.1",
+                    runner : "com.android.support.test:runner:$espressoVersion",
+                    rules  : "com.android.support.test:rules:$espressoVersion",
+                    intents: "com.android.support.test.espresso:espresso-intents:3.0.1",
+                    barista: "com.schibsted.spain:barista:2.4.0"
+            ],
+            mockito  : [
+                    core   : "org.mockito:mockito-core:2.13.0",
+                    kotlin : "com.nhaarman:mockito-kotlin:1.5.0",
+                    android: "org.mockito:mockito-android:2.13.0",
+            ],
+            dagger   : [
+                    mock  : "com.github.fabioCollini.daggermock:daggermock:0.8.4",
+                    kotlin: "com.github.fabioCollini.daggermock:daggermock-kotlin:0.8.4"
+            ]
+    ]
+
+    common = [
+            javaxAnnotions: "javax.annotation:javax.annotation-api:1.2",
+            kotlinPoet    : "com.squareup:kotlinpoet:0.5.0"
+    ]
+
+    def roomVersion = "1.0.0"
+    cache = [
+            room: [
+                    runtime : "android.arch.persistence.room:runtime:$roomVersion",
+                    compiler: "android.arch.persistence.room:compiler:$roomVersion",
+                    test    : "android.arch.persistence.room:testing:$roomVersion",
+                    rx      : "android.arch.persistence.room:rxjava2:$roomVersion"
+            ]
+    ]
+
+    def NVersion = '0.8.4'
+    kartographer = [
+            annotations: "org.firezenk.kartographer:annotations:$NVersion",
+            animations : "org.firezenk.kartographer:animations:$NVersion@aar",
+            library    : "org.firezenk.kartographer:library:$NVersion",
+            processor  : "org.firezenk.kartographer:processor:$NVersion"
+    ]
+
+    def wowzaVersion = '1.0b7'
+    wowza = "com.wowza.gocoder.sdk.android:com.wowza.gocoder.sdk:$wowzaVersion@aar"
+
+    def dexterVersion = '4.2.0'
+    dexter = "com.karumi:dexter:$dexterVersion"
+
+    def jsr305Version = '3.0.2'
+    jsr305 = "com.google.code.findbugs:jsr305:$jsr305Version"
+
+    def matisseVersion = '0.4.3'
+    matisse = "com.zhihu.android:matisse:$matisseVersion"
+
+    def spaceNavigationVersion = '1.6.1'
+    spaceNavigation = "com.github.armcha:SpaceNavigationView:$spaceNavigationVersion"
+}
