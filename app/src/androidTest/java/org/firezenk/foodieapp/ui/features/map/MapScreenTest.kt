@@ -13,11 +13,4 @@ class MapScreenTest {
 
     @get:Rule
     var rule = ProjectTestRule<MapScreen>(MapScreen::class.java, this)
-
-    @Test
-    fun onVisible_emptyTextIsDisplayed() {
-        rule.launchActivity()
-
-        assertDisplayed(R.string.app_name)
-    }
 }
