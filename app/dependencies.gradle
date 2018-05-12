@@ -41,12 +41,10 @@ ext {
                     rxAdapter: "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion",
                     gson     : "com.squareup.retrofit2:converter-gson:$retrofitVersion"
             ],
-
             okhttp  : [
                     library: "com.squareup.okhttp3:okhttp:$okHttpVersion",
                     logging: "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
             ],
-
             glide   : [
                     library : "com.github.bumptech.glide:glide:$glideVersion",
                     compiler: "com.github.bumptech.glide:compiler:$glideVersion",
@@ -75,11 +73,6 @@ ext {
             ]
     ]
 
-    common = [
-            javaxAnnotions: "javax.annotation:javax.annotation-api:1.2",
-            kotlinPoet    : "com.squareup:kotlinpoet:0.5.0"
-    ]
-
     def roomVersion = "1.0.0"
     cache = [
             room: [
@@ -90,26 +83,6 @@ ext {
             ]
     ]
 
-    def NVersion = '0.8.4'
-    kartographer = [
-            annotations: "org.firezenk.kartographer:annotations:$NVersion",
-            animations : "org.firezenk.kartographer:animations:$NVersion@aar",
-            library    : "org.firezenk.kartographer:library:$NVersion",
-            processor  : "org.firezenk.kartographer:processor:$NVersion"
-    ]
-
-    def wowzaVersion = '1.0b7'
-    wowza = "com.wowza.gocoder.sdk.android:com.wowza.gocoder.sdk:$wowzaVersion@aar"
-
-    def dexterVersion = '4.2.0'
-    dexter = "com.karumi:dexter:$dexterVersion"
-
-    def jsr305Version = '3.0.2'
-    jsr305 = "com.google.code.findbugs:jsr305:$jsr305Version"
-
-    def matisseVersion = '0.4.3'
-    matisse = "com.zhihu.android:matisse:$matisseVersion"
-
-    def spaceNavigationVersion = '1.6.1'
-    spaceNavigation = "com.github.armcha:SpaceNavigationView:$spaceNavigationVersion"
+    def mapboxVersion = "6.1.1"
+    mapbox = "com.mapbox.mapboxsdk:mapbox-android-sdk:$mapboxVersion"
 }

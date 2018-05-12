@@ -14,6 +14,11 @@ android {
         versionCode appCode
         versionName appName
         testInstrumentationRunner testRunner
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("mapbox.properties").newDataInputStream())
+
+        buildConfigField "String", "MAPBOX_API_KEY",  properties.getProperty("apiKey")
     }
     buildTypes {
         release {
@@ -51,6 +56,8 @@ dependencies {
 
     implementation network.glide.library
     kapt network.glide.compiler
+
+    implementation mapbox
 
     testImplementation testing.jUnit
     testImplementation testing.mockito.core
