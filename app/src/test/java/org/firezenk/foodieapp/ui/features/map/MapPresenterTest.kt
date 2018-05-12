@@ -1,7 +1,12 @@
 package org.firezenk.foodieapp.ui.features.map
 
-import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Flowable
+import io.reactivex.Single
 import org.firezenk.foodieapp.configureRxThreading
+import org.firezenk.foodieapp.domain.models.Coordinates
+import org.firezenk.foodieapp.domain.models.Location
+import org.firezenk.foodieapp.domain.models.Venue
 import org.firezenk.foodieapp.domain.repositories.CoordinatesRepository
 import org.firezenk.foodieapp.domain.repositories.VenuesRepository
 import org.firezenk.foodieapp.domain.usecases.CancelReservation
@@ -9,7 +14,9 @@ import org.firezenk.foodieapp.domain.usecases.MakeReservation
 import org.firezenk.foodieapp.domain.usecases.ObtainCoordinates
 import org.firezenk.foodieapp.domain.usecases.ObtainVenue
 import org.firezenk.foodieapp.domain.usecases.ObtainVenues
+import org.junit.Assert
 import org.junit.Before
+import org.junit.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.Captor
 import org.mockito.MockitoAnnotations
@@ -57,5 +64,25 @@ class MapPresenterTest {
         coordinatesRepository = mock()
         venuesRepository = mock()
         screen = mock()
+    }
+
+    @Test
+    fun onMapReady_putsUserAndVenuePointers() {
+        given(coordinatesRepository.subscribeForCoordinates())
+                .willReturn(Flowable.just(Coordinates(43.0, 1.0)))
+
+        given(venuesRepository.findNearbyVenues(43.0, 1.0))
+                .willReturn(Single.just(listOf(Venue("", "",
+                        Location("", "", "", "", "",
+                                "", 43.0, 1.0, 0f), false))))
+
+        presenter reduce actions.loadVenues()
+
+        verify(screen, times(2)).render(capture(captor))
+
+        with(captor.allValues) {
+            Assert.assertTrue(get(0) is PositionReady)
+            Assert.assertTrue(get(1) is PointersReady)
+        }
     }
 }
