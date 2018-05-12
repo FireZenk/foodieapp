@@ -9,13 +9,17 @@ class MapActions @Inject constructor(private val obtainVenues: ObtainVenues,
                                      private val obtainCoordinates: ObtainCoordinates) {
 
     fun loadVenues() = LoadVenues(obtainVenues, obtainCoordinates)
+    fun openVenue(venueName: String) = OpenVenueDetail(venueName)
 
     sealed class MapAction : Action() {
 
         class LoadVenues(val obtainVenues: ObtainVenues, val obtainCoordinates: ObtainCoordinates)
             : MapAction()
+
+        class OpenVenueDetail(venueName: String): MapAction()
     }
 }
 
 typealias Actions = MapActions.MapAction
 typealias LoadVenues = MapActions.MapAction.LoadVenues
+typealias OpenVenueDetail = MapActions.MapAction.OpenVenueDetail

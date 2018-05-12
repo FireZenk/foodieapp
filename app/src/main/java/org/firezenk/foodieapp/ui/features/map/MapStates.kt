@@ -9,6 +9,7 @@ class MapStates @Inject constructor() {
     sealed class MapState : State() {
         class PositionReady(val lat: Double, val lng: Double) : MapState()
         class PointersReady(val venues: List<Venue>) : MapState()
+        class VenueReady(val venue: Venue) : MapState()
         class ErrorMessage(val e: Throwable) : MapState()
     }
 }
@@ -16,4 +17,5 @@ class MapStates @Inject constructor() {
 typealias States = MapStates.MapState
 typealias PositionReady = MapStates.MapState.PositionReady
 typealias PointersReady = MapStates.MapState.PointersReady
+typealias VenueReady = MapStates.MapState.VenueReady
 typealias ErrorMessage = MapStates.MapState.ErrorMessage
