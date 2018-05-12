@@ -21,6 +21,10 @@ import org.firezenk.foodieapp.ui.utils.getBitmapFromVectorDrawable
 
 class MapScreen : AppCompatActivity(), Screen<States> {
 
+    companion object {
+        private const val MAP_ZOOM = 15.0
+    }
+
     @Inject lateinit var presenter: MapPresenter
     @Inject lateinit var actions: MapActions
 
@@ -114,7 +118,7 @@ class MapScreen : AppCompatActivity(), Screen<States> {
 
         mapboxMap.cameraPosition = CameraPosition.Builder()
                 .target(position)
-                .zoom(15.0)
+                .zoom(MAP_ZOOM)
                 .build()
     }
 

@@ -19,6 +19,7 @@ class CoordinatesDataSource @Inject constructor(activity: Activity) {
 
     companion object {
         const val UPDATE_INTERVAL_IN_MILLIS = 30_000L
+        const val MIN_DISTANCE = 0f
     }
 
     private lateinit var broadcaster: FlowableEmitter<Coordinates>
@@ -44,7 +45,7 @@ class CoordinatesDataSource @Inject constructor(activity: Activity) {
     @SuppressLint("MissingPermission")
     fun subscribeForCoordinates(): Flowable<Coordinates> {
         locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, UPDATE_INTERVAL_IN_MILLIS, 0f, locationListener)
+                LocationManager.GPS_PROVIDER, UPDATE_INTERVAL_IN_MILLIS, MIN_DISTANCE, locationListener)
 
         flowable.doOnSubscribe {
             broadcaster.onNext(
