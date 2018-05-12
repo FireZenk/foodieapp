@@ -14,7 +14,7 @@ abstract class Presenter<in A : Action, S : State> {
 
     abstract infix fun reduce(action: A)
 
-    infix fun render(state: S) = screen.render(state)
+    protected infix fun render(state: S) = screen.render(state)
 
     fun destroy() = disposables.clear()
 }
