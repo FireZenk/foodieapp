@@ -37,18 +37,7 @@ class MapScreen : AppCompatActivity(), Screen<States> {
 
         presenter init this
 
-        mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync {
-            mapboxMap = it
-            mapboxMap.setOnMarkerClickListener {
-                Snackbar.make(mapView, it.title, Snackbar.LENGTH_SHORT).show()
-                return@setOnMarkerClickListener true
-            }
-            grantPermissions(listOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION),
-                    { presenter reduce actions.loadVenues() })
-        }
+        initView(savedInstanceState)
     }
 
     override fun onStart() {
@@ -89,35 +78,64 @@ class MapScreen : AppCompatActivity(), Screen<States> {
 
     override fun render(state: States) {
         when (state) {
-            is PositionReady -> {
-                val position = LatLng(state.lat, state.lng)
-                if (mapboxMap.markers.size > 0) {
-                    mapboxMap.removeMarker(userMarker.marker)
-                }
-                userMarker.position = position
-                mapboxMap.addMarker(userMarker)
+            is PositionReady -> onPositionReady(state)
+            is PointersReady -> onPointersReady(state)
+            is ErrorMessage -> onErrorMessage(state)
+        }
+    }
 
-                mapboxMap.cameraPosition = CameraPosition.Builder()
-                        .target(position)
-                        .zoom(15.0)
-                        .build()
-            }
-            is PointersReady -> {
-                val iconFactory = IconFactory.getInstance(this@MapScreen)
-                val icon = iconFactory.fromBitmap(
-                        getBitmapFromVectorDrawable(this, R.drawable.ic_food_pin))
-
-                state.venues.forEach {
-                    mapboxMap.addMarker(MarkerOptions()
-                            .position(LatLng(it.location.lat, it.location.lng))
-                            .setTitle(it.name)
-                            .setIcon(icon))
-                }
-            }
-            is ErrorMessage -> {
-                state.e.printStackTrace()
-                Snackbar.make(mapView, state.e.message ?: "error", Snackbar.LENGTH_SHORT).show()
+    private fun initView(savedInstanceState: Bundle?) {
+        mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync {
+            mapboxMap = it
+            mapboxMap.setOnMarkerClickListener {
+                Snackbar.make(mapView, it.title, Snackbar.LENGTH_SHORT).show()
+                return@setOnMarkerClickListener true
             }
         }
+
+        askForPermissions()
+    }
+
+    private fun askForPermissions() {
+        grantPermissions(listOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION),
+                { presenter reduce actions.loadVenues() })
+    }
+
+    private fun onPositionReady(state: PositionReady) {
+        val position = LatLng(state.lat, state.lng)
+        if (mapboxMap.markers.size > 0) {
+            mapboxMap.removeMarker(userMarker.marker)
+        }
+        userMarker.position = position
+        mapboxMap.addMarker(userMarker)
+
+        mapboxMap.cameraPosition = CameraPosition.Builder()
+                .target(position)
+                .zoom(15.0)
+                .build()
+    }
+
+    private fun onPointersReady(state: PointersReady) {
+        val iconFactory = IconFactory.getInstance(this@MapScreen)
+        val icon = iconFactory.fromBitmap(
+                getBitmapFromVectorDrawable(this, R.drawable.ic_food_pin))
+
+        mapboxMap.clear()
+        mapboxMap.addMarker(userMarker)
+
+        state.venues.forEach {
+            mapboxMap.addMarker(MarkerOptions()
+                    .position(LatLng(it.location.lat, it.location.lng))
+                    .setTitle(it.name)
+                    .setIcon(icon))
+        }
+    }
+
+    private fun onErrorMessage(state: ErrorMessage) {
+        state.e.printStackTrace()
+        Snackbar.make(mapView, state.e.message ?: "error", Snackbar.LENGTH_SHORT).show()
     }
 }

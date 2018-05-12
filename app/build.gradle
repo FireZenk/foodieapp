@@ -23,8 +23,7 @@ android {
         buildConfigField "String", "MAPBOX_API_KEY", properties.getProperty("apiKey")
         buildConfigField "String", "CLIENT_ID", properties.getProperty("clientId")
         buildConfigField "String", "CLIENT_SECRET", properties.getProperty("clientSecret")
-
-        buildConfigField "String", "FOURSQUARE_API", "https://api.foursquare.com/v2/"
+        buildConfigField "String", "FOURSQUARE_API", properties.getProperty("foursquareApi")
     }
     buildTypes {
         release {
