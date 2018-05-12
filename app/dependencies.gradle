@@ -17,6 +17,7 @@ ext {
     support = [
             appcompat : "com.android.support:appcompat-v7:$supportVersion",
             design    : "com.android.support:design:$supportVersion",
+            cardview  : "com.android.support:cardview-v7:$supportVersion",
             constraint: "com.android.support.constraint:constraint-layout:$supportConstraintVersion",
     ]
 

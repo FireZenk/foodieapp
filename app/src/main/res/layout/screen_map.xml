@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.features.map.MapScreen"
+    tools:background="@tools:sample/backgrounds/scenic">
 
-    <com.mapbox.mapboxsdk.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets" />
+    <include layout="@layout/venues_map" />
 
-</android.support.constraint.ConstraintLayout>
+    <include layout="@layout/venue_detail" />
+
+</android.support.design.widget.CoordinatorLayout>

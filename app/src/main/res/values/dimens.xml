@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="smallMargin">4dp</dimen>
+    <dimen name="defaultMargin">8dp</dimen>
+    <dimen name="expandedMargin">16dp</dimen>
+    <dimen name="buttonHeight">48dp</dimen>
+    <dimen name="detailMinHeight">112dp</dimen>
+    <dimen name="cardElevation">8dp</dimen>
+    <dimen name="cardCornerRadius">0dp</dimen>
+</resources>

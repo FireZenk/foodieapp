@@ -39,6 +39,7 @@ dependencies {
     implementation kotlin
     implementation support.appcompat
     implementation support.design
+    implementation support.cardview
     implementation support.constraint
 
     kapt dagger.compiler

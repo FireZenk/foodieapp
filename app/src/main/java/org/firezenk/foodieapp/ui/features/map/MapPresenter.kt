@@ -10,6 +10,7 @@ class MapPresenter @Inject constructor() : Presenter<Actions, States>() {
     override fun reduce(action: Actions) {
         when (action) {
             is LoadVenues -> getCoordinates(action)
+            is OpenVenueDetail -> getVenue(action)
         }
     }
 
@@ -29,6 +30,14 @@ class MapPresenter @Inject constructor() : Presenter<Actions, States>() {
                 .observeOnUI()
                 .subscribe(
                         { render(PointersReady(it)) },
+                        { render(ErrorMessage(it)) })
+    }
+
+    private fun getVenue(action: OpenVenueDetail) {
+        disposables += action.obtainVenue.execute(action.venueName)
+                .observeOnUI()
+                .subscribe(
+                        { render(VenueReady(it)) },
                         { render(ErrorMessage(it)) })
     }
 }
