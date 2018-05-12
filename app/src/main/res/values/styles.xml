@@ -21,12 +21,12 @@
 
     <style name="Venue.MakeReservation" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:text">@string/reservation_button</item>
+        <item name="android:text">@string/reservation_make</item>
     </style>
 
     <style name="Venue.CancelReservation" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="android:text">@string/reservation_button</item>
+        <item name="android:text">@string/reservation_cancel</item>
         <item name="android:visibility">gone</item>
     </style>
 

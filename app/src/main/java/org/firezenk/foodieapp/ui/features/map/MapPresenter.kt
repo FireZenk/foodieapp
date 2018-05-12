@@ -11,6 +11,8 @@ class MapPresenter @Inject constructor() : Presenter<Actions, States>() {
         when (action) {
             is LoadVenues -> getCoordinates(action)
             is OpenVenueDetail -> getVenue(action)
+            is MakeReservation -> makeReservation(action)
+            is CancelReservation -> cancelReservation(action)
         }
     }
 
@@ -38,6 +40,22 @@ class MapPresenter @Inject constructor() : Presenter<Actions, States>() {
                 .observeOnUI()
                 .subscribe(
                         { render(VenueReady(it)) },
+                        { render(ErrorMessage(it)) })
+    }
+
+    private fun makeReservation(action: MakeReservation) {
+        disposables += action.makeReservation.execute(action.id)
+                .observeOnUI()
+                .subscribe(
+                        { render(ReservationChanged(true)) },
+                        { render(ErrorMessage(it)) })
+    }
+
+    private fun cancelReservation(action: CancelReservation) {
+        disposables += action.cancelReservation.execute(action.id)
+                .observeOnUI()
+                .subscribe(
+                        { render(ReservationChanged(false)) },
                         { render(ErrorMessage(it)) })
     }
 }
