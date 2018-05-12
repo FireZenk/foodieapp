@@ -110,16 +110,15 @@ class MapScreen : AppCompatActivity(), Screen<States> {
 
     private fun onPositionReady(state: PositionReady) {
         val position = LatLng(state.lat, state.lng)
-        if (mapboxMap.markers.size > 0) {
-            mapboxMap.removeMarker(userMarker.marker)
-        }
         userMarker.position = position
-        mapboxMap.addMarker(userMarker)
 
-        mapboxMap.cameraPosition = CameraPosition.Builder()
-                .target(position)
-                .zoom(MAP_ZOOM)
-                .build()
+        with(mapboxMap) {
+            addMarker(userMarker)
+            cameraPosition = CameraPosition.Builder()
+                    .target(position)
+                    .zoom(MAP_ZOOM)
+                    .build()
+        }
     }
 
     private fun onPointersReady(state: PointersReady) {
