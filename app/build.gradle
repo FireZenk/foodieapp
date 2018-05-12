@@ -14,11 +14,16 @@ android {
         versionCode appCode
         versionName appName
         testInstrumentationRunner testRunner
+        vectorDrawables.useSupportLibrary = true
 
         Properties properties = new Properties()
         properties.load(project.rootProject.file("mapbox.properties").newDataInputStream())
+        properties.load(project.rootProject.file("foursquare.properties").newDataInputStream())
 
-        buildConfigField "String", "MAPBOX_API_KEY",  properties.getProperty("apiKey")
+        buildConfigField "String", "MAPBOX_API_KEY", properties.getProperty("apiKey")
+        buildConfigField "String", "CLIENT_ID", properties.getProperty("clientId")
+        buildConfigField "String", "CLIENT_SECRET", properties.getProperty("clientSecret")
+        buildConfigField "String", "FOURSQUARE_API", properties.getProperty("foursquareApi")
     }
     buildTypes {
         release {
@@ -58,6 +63,7 @@ dependencies {
     kapt network.glide.compiler
 
     implementation mapbox
+    implementation dexter
 
     testImplementation testing.jUnit
     testImplementation testing.mockito.core

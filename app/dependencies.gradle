@@ -85,4 +85,7 @@ ext {
 
     def mapboxVersion = "6.1.1"
     mapbox = "com.mapbox.mapboxsdk:mapbox-android-sdk:$mapboxVersion"
+
+    def dexterVersion = '4.2.0'
+    dexter = "com.karumi:dexter:$dexterVersion"
 }
