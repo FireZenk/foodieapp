@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Foodie app</string>
+    <string name="user_marker_title">You\'re here!</string>
+    <string name="reservation_button">Make a reservation</string>
 </resources>
