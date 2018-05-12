@@ -7,4 +7,27 @@
         <item name="divider">@color/divider</item>
     </style>
 
+    <style name="Venue"/>
+
+    <style name="Venue.Name" parent="TextAppearance.AppCompat.Large">
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Venue.Address" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Venue.MakeReservation" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:text">@string/reservation_button</item>
+    </style>
+
+    <style name="Venue.CancelReservation" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:text">@string/reservation_button</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
 </resources>

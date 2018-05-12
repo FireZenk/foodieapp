@@ -27,25 +27,28 @@
             android:id="@+id/venueName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="1"
-            android:ellipsize="end"
             tools:text="Mutenroshi Ramen"
-            style="@style/TextAppearance.AppCompat.Large"/>
+            style="@style/Venue.Name"/>
 
         <TextView
             android:id="@+id/venueAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="1"
-            android:ellipsize="end"
             tools:text="Address"
-            style="@style/TextAppearance.AppCompat.Medium"/>
+            style="@style/Venue.Address"/>
 
         <Button
+            android:id="@+id/venueMakeReservation"
             android:layout_width="match_parent"
             android:layout_height="@dimen/buttonHeight"
-            android:text="@string/reservation_button"
-            style="?borderlessButtonStyle"/>
+            style="@style/Venue.MakeReservation" />
+
+        <Button
+            android:id="@+id/venueCancelReservation"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/buttonHeight"
+            tools:visibility="visible"
+            style="@style/Venue.CancelReservation" />
 
         <View
             android:layout_width="match_parent"
