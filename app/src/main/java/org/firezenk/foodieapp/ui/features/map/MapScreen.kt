@@ -34,7 +34,10 @@ class MapScreen : AppCompatActivity(), Screen<States> {
     private lateinit var mapboxMap: MapboxMap
     private lateinit var sheetBehavior: BottomSheetBehavior<*>
     private val userMarker: MarkerOptions by lazy {
-        MarkerOptions().apply { setVectorIcon(this@MapScreen, R.drawable.ic_user_pin) }
+        MarkerOptions().apply {
+            title = getString(R.string.user_marker_title)
+            setVectorIcon(this@MapScreen, R.drawable.ic_user_pin)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,8 +105,11 @@ class MapScreen : AppCompatActivity(), Screen<States> {
         mapView.getMapAsync {
             mapboxMap = it
             mapboxMap.setOnMarkerClickListener {
-                presenter reduce actions.openVenue(it.title)
-                return@setOnMarkerClickListener true
+                if (it.title != getString(R.string.user_marker_title)) {
+                    presenter reduce actions.openVenue(it.title)
+                    return@setOnMarkerClickListener true
+                }
+                return@setOnMarkerClickListener false
             }
         }
 
@@ -147,6 +153,12 @@ class MapScreen : AppCompatActivity(), Screen<States> {
     }
 
     private fun onVenueReady(state: VenueReady) {
+        sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        venueName.text = state.venue.name
+        venueAddress.text = getString(R.string.venue_address, state.venue.location.address,
+                state.venue.location.postalCode, state.venue.location.city)
+
         sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
