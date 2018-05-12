@@ -11,7 +11,9 @@ class VenuesRepository @Inject constructor(private val netDataSource: Network,
                                            private val dbDataSource: Database) {
 
     fun findNearbyVenues(lat: Double, lng: Double): Single<List<Venue>>
-            = netDataSource.findNearbyVenues(lat, lng).subscribeOnIO()
+            = netDataSource.findNearbyVenues(lat, lng)
+            .map { dbDataSource.addAll(it) }
+            .subscribeOnIO()
 
     fun findVenue(venueName: String): Single<Venue>
             = dbDataSource.findVenue(venueName).subscribeOnIO()
