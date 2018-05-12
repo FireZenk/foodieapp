@@ -1,16 +1,24 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+apply from: "dependencies.gradle"
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion compileSdk
     defaultConfig {
-        applicationId "org.firezenk.foodieapp"
-        minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationId appPackage
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+        versionCode appCode
+        versionName appName
+        testInstrumentationRunner testRunner
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("mapbox.properties").newDataInputStream())
+
+        buildConfigField "String", "MAPBOX_API_KEY",  properties.getProperty("apiKey")
     }
     buildTypes {
         release {
@@ -22,9 +30,57 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation kotlin
+    implementation support.appcompat
+    implementation support.design
+    implementation support.constraint
+
+    kapt dagger.compiler
+    implementation dagger.library
+
+    implementation rx.java
+    implementation rx.android
+
+    implementation network.retrofit.library
+    implementation network.retrofit.gson
+    implementation network.retrofit.rxAdapter
+
+    implementation network.okhttp.library
+    implementation network.okhttp.logging
+
+    implementation cache.room.runtime
+    implementation cache.room.rx
+    testImplementation cache.room.runtime
+    kapt cache.room.compiler
+
+    implementation network.glide.library
+    kapt network.glide.compiler
+
+    implementation mapbox
+
+    testImplementation testing.jUnit
+    testImplementation testing.mockito.core
+    testImplementation testing.mockito.kotlin
+
+    kaptAndroidTest dagger.compiler
+    kaptAndroidTest cache.room.compiler
+
+    androidTestImplementation testing.mockito.core
+    androidTestImplementation testing.mockito.kotlin
+    androidTestImplementation testing.mockito.android
+
+    androidTestImplementation testing.espresso.core
+    androidTestImplementation testing.espresso.runner
+    androidTestImplementation testing.espresso.rules
+    androidTestImplementation testing.espresso.intents
+
+    androidTestImplementation testing.espresso.barista
+
+    androidTestImplementation testing.dagger.mock
+    androidTestImplementation testing.dagger.kotlin
+
+    testImplementation cache.room.test
+
+    androidTestImplementation testing.dexOpener
 }
