@@ -2,6 +2,7 @@ package org.firezenk.foodieapp.ui.features.map
 
 import android.Manifest
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
@@ -16,6 +17,8 @@ import org.firezenk.foodieapp.ui.features.commons.Screen
 import org.firezenk.foodieapp.ui.features.map.di.MapModule
 import javax.inject.Inject
 import com.mapbox.mapboxsdk.annotations.IconFactory
+import kotlinx.android.synthetic.main.venue_detail.*
+import kotlinx.android.synthetic.main.venues_map.*
 import org.firezenk.foodieapp.ui.extensions.setVectorIcon
 import org.firezenk.foodieapp.ui.utils.getBitmapFromVectorDrawable
 
@@ -29,6 +32,7 @@ class MapScreen : AppCompatActivity(), Screen<States> {
     @Inject lateinit var actions: MapActions
 
     private lateinit var mapboxMap: MapboxMap
+    private lateinit var sheetBehavior: BottomSheetBehavior<*>
     private val userMarker: MarkerOptions by lazy {
         MarkerOptions().apply { setVectorIcon(this@MapScreen, R.drawable.ic_user_pin) }
     }
@@ -84,16 +88,21 @@ class MapScreen : AppCompatActivity(), Screen<States> {
         when (state) {
             is PositionReady -> onPositionReady(state)
             is PointersReady -> onPointersReady(state)
+            is VenueReady -> onVenueReady(state)
             is ErrorMessage -> onErrorMessage(state)
         }
     }
 
     private fun initView(savedInstanceState: Bundle?) {
+        sheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        sheetBehavior.isHideable = true
+
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync {
             mapboxMap = it
             mapboxMap.setOnMarkerClickListener {
-                Snackbar.make(mapView, it.title, Snackbar.LENGTH_SHORT).show()
+                presenter reduce actions.openVenue(it.title)
                 return@setOnMarkerClickListener true
             }
         }
@@ -135,6 +144,10 @@ class MapScreen : AppCompatActivity(), Screen<States> {
                     .setTitle(it.name)
                     .setIcon(icon))
         }
+    }
+
+    private fun onVenueReady(state: VenueReady) {
+        sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     private fun onErrorMessage(state: ErrorMessage) {
