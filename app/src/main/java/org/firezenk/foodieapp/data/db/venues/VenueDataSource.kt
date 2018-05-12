@@ -1,6 +1,5 @@
 package org.firezenk.foodieapp.data.db.venues
 
-import io.reactivex.Completable
 import io.reactivex.Single
 import org.firezenk.foodieapp.domain.models.Location
 import org.firezenk.foodieapp.domain.models.Venue
@@ -33,6 +32,6 @@ class VenueDataSource @Inject constructor(private val venueDao: VenueDao) {
     private fun mapVenue(it: VenueEntity): Venue {
         return Venue(it.id, it.name, Location(it.location.address, it.location.crossStreet,
                 it.location.city, it.location.state, it.location.postalCode, it.location.country,
-                it.location.lat, it.location.lng, it.location.distance))
+                it.location.lat, it.location.lng, it.location.distance), it.reserved)
     }
 }
