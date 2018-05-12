@@ -17,11 +17,12 @@ import javax.inject.Singleton
 open class NetworkModule {
 
     @Provides
-    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit.Builder
+    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit
             = Retrofit.Builder()
             .client(okHttpClient)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(Gson()))
+            .baseUrl(BuildConfig.FOURSQUARE_API).build()
 
     @Provides
     fun providesOkHttpClient(logInterceptor: Interceptor): OkHttpClient

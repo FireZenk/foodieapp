@@ -20,9 +20,11 @@ android {
         properties.load(project.rootProject.file("mapbox.properties").newDataInputStream())
         properties.load(project.rootProject.file("foursquare.properties").newDataInputStream())
 
-        buildConfigField "String", "MAPBOX_API_KEY",  properties.getProperty("apiKey")
-        buildConfigField "String", "CLIENT_ID",  properties.getProperty("clientId")
-        buildConfigField "String", "CLIENT_SECRET",  properties.getProperty("clientSecret")
+        buildConfigField "String", "MAPBOX_API_KEY", properties.getProperty("apiKey")
+        buildConfigField "String", "CLIENT_ID", properties.getProperty("clientId")
+        buildConfigField "String", "CLIENT_SECRET", properties.getProperty("clientSecret")
+
+        buildConfigField "String", "FOURSQUARE_API", "https://api.foursquare.com/v2/"
     }
     buildTypes {
         release {
