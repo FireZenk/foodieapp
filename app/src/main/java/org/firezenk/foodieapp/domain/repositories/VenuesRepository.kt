@@ -30,6 +30,11 @@ class VenuesRepository @Inject constructor(private val netDataSource: Network,
     fun findVenue(venueName: String): Single<Venue>
             = dbDataSource.findVenue(venueName).subscribeOnIO()
 
+    fun downloadFullVenue(venueId: String): Single<Venue>
+            = netDataSource.getVenue(venueId)
+            .map { dbDataSource.updateVenue(it) }
+            .subscribeOnIO()
+
     fun makeReservation(venueId: String): Completable
             = Completable.fromAction { dbDataSource.makeReservation(venueId) }.subscribeOnIO()
 
