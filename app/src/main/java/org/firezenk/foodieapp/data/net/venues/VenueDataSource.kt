@@ -3,20 +3,17 @@ package org.firezenk.foodieapp.data.net.venues
 import io.reactivex.Observable
 import io.reactivex.Single
 import org.firezenk.foodieapp.data.net.FoursquareApi
-import org.firezenk.foodieapp.domain.models.Location
-import org.firezenk.foodieapp.domain.models.Venue
+import org.firezenk.foodieapp.domain.models.*
 import javax.inject.Inject
 
-class VenueDataSource @Inject constructor(private val foursquareApi: FoursquareApi) {
+class VenueDataSource @Inject constructor(private val foursquareApi: FoursquareApi,
+                                          private val mapper: VenueMapper) {
 
     fun findNearbyVenues(lat: Double, lng: Double): Observable<List<Venue>>
             = foursquareApi.venueSearch("$lat,$lng")
-            .map { it.response.venues.map { mapVenue(it) } }
+            .map { it.response.venues.map { mapper.mapPartialVenue(it) } }
 
-    private fun mapVenue(it: VenueEntity): Venue {
-        return Venue(it.id, it.name,
-                Location(it.location.address, it.location.crossStreet, it.location.city,
-                        it.location.state, it.location.postalCode, it.location.country,
-                        it.location.lat, it.location.lng, it.location.distance), false)
-    }
+    fun getVenue(venueId: String): Single<Venue>
+            = foursquareApi.venue(venueId)
+            .map { mapper.mapFullVenue(it.response.venue) }
 }
