@@ -107,6 +107,21 @@ class MapPresenterTest {
     }
 
     @Test
+    fun onVenueClick_venueDoesNotExists() {
+        val venue = singleVenue()
+        given(venuesRepository.findVenue(venue.name))
+                .willReturn(Single.error(Exception()))
+
+        presenter reduce actions.openVenue(venue.name)
+
+        verify(screen, times(1)).render(capture(captor))
+
+        with(captor.allValues) {
+            assertTrue(get(0) is ErrorMessage)
+        }
+    }
+
+    @Test
     fun onMakeReservation_theReservationStateWillChange() {
         val venue = singleVenue()
         given(venuesRepository.makeReservation(venue.name)).willReturn(Completable.complete())
@@ -122,6 +137,21 @@ class MapPresenterTest {
     }
 
     @Test
+    fun onMakeReservation_theReservationFails() {
+        val venue = singleVenue()
+        given(venuesRepository.makeReservation(venue.name))
+                .willReturn(Completable.error(Exception()))
+
+        presenter reduce actions.makeReservation(venue.name)
+
+        verify(screen, times(1)).render(capture(captor))
+
+        with(captor.allValues) {
+            assertTrue(get(0) is ErrorMessage)
+        }
+    }
+
+    @Test
     fun onCancelReservation_theReservationStateWillChange() {
         val venue = singleVenue()
         given(venuesRepository.cancelReservation(venue.name)).willReturn(Completable.complete())
@@ -133,6 +163,21 @@ class MapPresenterTest {
         with(captor.allValues) {
             assertTrue(get(0) is ReservationChanged)
             assertFalse((get(0) as ReservationChanged).reserved)
+        }
+    }
+
+    @Test
+    fun onCancelReservation_theReservationFails() {
+        val venue = singleVenue()
+        given(venuesRepository.cancelReservation(venue.name))
+                .willReturn(Completable.error(Exception()))
+
+        presenter reduce actions.cancelReservation(venue.name)
+
+        verify(screen, times(1)).render(capture(captor))
+
+        with(captor.allValues) {
+            assertTrue(get(0) is ErrorMessage)
         }
     }
 
