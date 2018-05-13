@@ -1,6 +1,7 @@
 package org.firezenk.foodieapp.ui.features.map
 
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.firezenk.foodieapp.configureRxThreading
@@ -101,6 +102,21 @@ class MapPresenterTest {
         with(captor.allValues) {
             assertTrue(get(0) is VenueReady)
             assertTrue((get(0) as VenueReady).venue.name == venue.name)
+        }
+    }
+
+    @Test
+    fun onMakeReservation_theReservationStateWillChange() {
+        val venue = singleVenue()
+        given(venuesRepository.makeReservation(venue.name)).willReturn(Completable.complete())
+
+        presenter reduce actions.makeReservation(venue.name)
+
+        verify(screen, times(1)).render(capture(captor))
+
+        with(captor.allValues) {
+            assertTrue(get(0) is ReservationChanged)
+            assertTrue((get(0) as ReservationChanged).reserved)
         }
     }
 
