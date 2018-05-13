@@ -6,6 +6,7 @@ import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
@@ -19,8 +20,13 @@ import javax.inject.Inject
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import kotlinx.android.synthetic.main.venue_detail.*
 import kotlinx.android.synthetic.main.venues_map.*
+import org.firezenk.foodieapp.domain.models.Extras
+import org.firezenk.foodieapp.ui.extensions.dsl
 import org.firezenk.foodieapp.ui.extensions.setVectorIcon
 import org.firezenk.foodieapp.ui.utils.getBitmapFromVectorDrawable
+import android.text.util.Linkify
+
+
 
 class MapScreen : AppCompatActivity(), Screen<States> {
 
@@ -91,7 +97,8 @@ class MapScreen : AppCompatActivity(), Screen<States> {
         when (state) {
             is PositionReady -> onPositionReady(state)
             is PointersReady -> onPointersReady(state)
-            is VenueReady -> onVenueReady(state)
+            is PartialVenueReady -> onPartialVenueReady(state)
+            is FullVenueReady -> onFullVenueReady(state.venue.extras)
             is ReservationChanged -> onReservationChanged(state)
             is ErrorMessage -> onErrorMessage(state)
         }
@@ -162,7 +169,7 @@ class MapScreen : AppCompatActivity(), Screen<States> {
         }
     }
 
-    private fun onVenueReady(state: VenueReady) {
+    private fun onPartialVenueReady(state: PartialVenueReady) {
         sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         venueName.text = state.venue.name
@@ -179,7 +186,28 @@ class MapScreen : AppCompatActivity(), Screen<States> {
             presenter reduce actions.cancelReservation(state.venue.id)
         }
 
+        state.venue.extras?.let { onFullVenueReady(it) }
+
         sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    private fun onFullVenueReady(extras: Extras?) {
+        extras?.let {
+            venueContact.text = it.contact?.formattedPhone
+            Linkify.addLinks(venueContact, Linkify.PHONE_NUMBERS)
+
+            venueUrl.text = it.url
+            Linkify.addLinks(venueUrl, Linkify.WEB_URLS)
+
+            venueRating.rating = it.rating
+
+            it.bestPhoto?.url?.let {
+                venueImage.dsl {
+                    url = it
+                    strategy = DiskCacheStrategy.ALL
+                }
+            }
+        }
     }
 
     private fun onReservationChanged(state: ReservationChanged) {

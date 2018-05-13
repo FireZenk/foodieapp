@@ -5,17 +5,12 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.firezenk.foodieapp.configureRxThreading
-import org.firezenk.foodieapp.domain.models.Coordinates
-import org.firezenk.foodieapp.domain.models.Location
-import org.firezenk.foodieapp.domain.models.Venue
+import org.firezenk.foodieapp.domain.models.*
 import org.firezenk.foodieapp.domain.repositories.CoordinatesRepository
 import org.firezenk.foodieapp.domain.repositories.VenuesRepository
+import org.firezenk.foodieapp.domain.usecases.*
 import org.firezenk.foodieapp.domain.usecases.CancelReservation
 import org.firezenk.foodieapp.domain.usecases.MakeReservation
-import org.firezenk.foodieapp.domain.usecases.ObtainCoordinates
-import org.firezenk.foodieapp.domain.usecases.ObtainVenue
-import org.firezenk.foodieapp.domain.usecases.ObtainVenues
-import org.junit.Assert
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -30,7 +25,8 @@ class MapPresenterTest {
     private lateinit var venuesRepository: VenuesRepository
     private lateinit var obtainVenues: ObtainVenues
     private lateinit var obtainCoordinates: ObtainCoordinates
-    private lateinit var obtainVenue: ObtainVenue
+    private lateinit var obtainPartialVenue: ObtainPartialVenue
+    private lateinit var obtainFullVenue: ObtainFullVenue
     private lateinit var makeReservation: MakeReservation
     private lateinit var cancelReservation: CancelReservation
 
@@ -51,11 +47,12 @@ class MapPresenterTest {
 
         obtainVenues = ObtainVenues(venuesRepository)
         obtainCoordinates = ObtainCoordinates(coordinatesRepository)
-        obtainVenue = ObtainVenue(venuesRepository)
+        obtainPartialVenue = ObtainPartialVenue(venuesRepository)
+        obtainFullVenue = ObtainFullVenue(venuesRepository)
         makeReservation = MakeReservation(venuesRepository)
         cancelReservation = CancelReservation(venuesRepository)
-        actions = MapActions(obtainVenues, obtainCoordinates, obtainVenue, makeReservation,
-                cancelReservation)
+        actions = MapActions(obtainVenues, obtainCoordinates, obtainPartialVenue, obtainFullVenue,
+                makeReservation, cancelReservation)
 
         presenter = MapPresenter()
         presenter init screen
@@ -95,14 +92,17 @@ class MapPresenterTest {
         val venue = singleVenue()
         given(venuesRepository.findVenue(venue.id))
                 .willReturn(Single.just(venue))
+        given(venuesRepository.downloadFullVenue(venue.id))
+                .willReturn(Single.just(singleFullVenue()))
 
         presenter reduce actions.openVenue(venue.id)
 
-        verify(screen, times(1)).render(capture(captor))
+        verify(screen, times(2)).render(capture(captor))
 
         with(captor.allValues) {
-            assertTrue(get(0) is VenueReady)
-            assertTrue((get(0) as VenueReady).venue.id == venue.id)
+            assertTrue(get(0) is PartialVenueReady)
+            assertTrue((get(0) as PartialVenueReady).venue.id == venue.id)
+            assertTrue(get(1) is FullVenueReady)
         }
     }
 
@@ -184,5 +184,9 @@ class MapPresenterTest {
     private fun singleVenue(): Venue = Venue("111", "MacDonald's",
             Location("Avinguda de Rio de Janeiro, 42", null, "Barcelona",
                     "Catalonia", "08016", "Spain", 41.425003,
-                    2.1658096, 1f), false)
+                    2.1658096, 1f), false, null)
+
+    private fun singleFullVenue(): Venue = singleVenue()
+            .copy(extras = Extras(ExtrasContact(""), ExtrasLikes(""),
+                    3.5f, ExtrasPhoto(""), ""))
 }

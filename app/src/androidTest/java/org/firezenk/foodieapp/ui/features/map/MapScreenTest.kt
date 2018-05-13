@@ -46,5 +46,5 @@ class MapScreenTest {
     private fun singleVenue(): Venue = Venue("111", "MacDonald's",
             Location("Avinguda de Rio de Janeiro, 42", null, "Barcelona",
                     "Catalonia", "08016", "Spain", 41.425003,
-                    2.1658096, 1f), false)
+                    2.1658096, 1f), false, null)
 }

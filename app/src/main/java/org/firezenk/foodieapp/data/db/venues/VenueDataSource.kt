@@ -1,37 +1,28 @@
 package org.firezenk.foodieapp.data.db.venues
 
 import io.reactivex.Single
-import org.firezenk.foodieapp.domain.models.Location
-import org.firezenk.foodieapp.domain.models.Venue
+import org.firezenk.foodieapp.domain.models.*
 import javax.inject.Inject
 
-class VenueDataSource @Inject constructor(private val venueDao: VenueDao) {
+class VenueDataSource @Inject constructor(private val venueDao: VenueDao,
+                                          private val mapper: VenueMapper) {
 
     fun addAll(venues: List<Venue>): List<Venue> {
         venues.forEach {
-            venueDao.insert(mapVenueEntity(it))
+            venueDao.insert(mapper.mapVenueEntity(it))
         }
         return venues
     }
 
-    fun findVenue(venueId: String): Single<Venue> {
-        return venueDao.findVenue(venueId).map { mapVenue(it) }
+    fun findVenue(venueId: String): Single<Venue>
+            = venueDao.findVenue(venueId).map { mapper.mapVenue(it) }
+
+    fun updateVenue(venue: Venue): Venue {
+        venueDao.insert(mapper.mapVenueEntity(venue))
+        return venue
     }
 
     fun makeReservation(venueId: String) = venueDao.makeReservation(venueId)
 
     fun cancelReservation(venueId: String) = venueDao.cancelReservation(venueId)
-
-    private fun mapVenueEntity(it: Venue): VenueEntity {
-        return VenueEntity(it.id, it.name, it.reserved, LocationEntity(it.location.address,
-                it.location.crossStreet, it.location.city, it.location.state,
-                it.location.postalCode, it.location.country, it.location.lat, it.location.lng,
-                it.location.distance))
-    }
-
-    private fun mapVenue(it: VenueEntity): Venue {
-        return Venue(it.id, it.name, Location(it.location.address, it.location.crossStreet,
-                it.location.city, it.location.state, it.location.postalCode, it.location.country,
-                it.location.lat, it.location.lng, it.location.distance), it.reserved)
-    }
 }
