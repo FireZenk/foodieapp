@@ -113,9 +113,8 @@ class MapScreen : AppCompatActivity(), Screen<States> {
                 }
                 return@setOnMarkerClickListener false
             }
+            askForPermissions()
         }
-
-        askForPermissions()
     }
 
     private fun askForPermissions() {
