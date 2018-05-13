@@ -72,6 +72,8 @@ dependencies {
     implementation mapbox
     implementation dexter
 
+    debugImplementation roomDebugger
+
     testImplementation testing.jUnit
     testImplementation testing.mockito.core
     testImplementation testing.mockito.kotlin

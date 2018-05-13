@@ -8,7 +8,7 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(tableName = VenueDao.VENUE_TABLE)
 data class VenueEntity(@PrimaryKey val id: String,
                        @ColumnInfo(name = "name") val name: String,
-                       @ColumnInfo(name = "reserved") val reserved: Boolean = false,
+                       @ColumnInfo(name = "reserved") val reserved: Boolean,
                        @Embedded(prefix = "venue_") val location: LocationEntity)
 
 data class LocationEntity(@ColumnInfo(name = "address") val address: String?,

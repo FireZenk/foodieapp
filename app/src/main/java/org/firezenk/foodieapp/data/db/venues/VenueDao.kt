@@ -19,10 +19,10 @@ interface VenueDao: BaseDao<VenueEntity> {
     fun findVenue(venueName: String): Single<VenueEntity>
 
     @Language("RoomSql")
-    @Query("UPDATE $VENUE_TABLE SET reserved = 1 WHERE id = :id")
+    @Query("UPDATE $VENUE_TABLE SET reserved = 1 WHERE id LIKE :id")
     fun makeReservation(id: String)
 
     @Language("RoomSql")
-    @Query("UPDATE $VENUE_TABLE SET reserved = 0 WHERE id = :id")
+    @Query("UPDATE $VENUE_TABLE SET reserved = 0 WHERE id LIKE :id")
     fun cancelReservation(id: String)
 }
