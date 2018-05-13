@@ -17,13 +17,19 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         Properties properties = new Properties()
-        properties.load(project.rootProject.file("mapbox.properties").newDataInputStream())
-        properties.load(project.rootProject.file("foursquare.properties").newDataInputStream())
+        if (project.rootProject.file("mapbox.properties").exists()) {
+            properties.load(project.rootProject.file("mapbox.properties").newDataInputStream())
+            properties.load(project.rootProject.file("foursquare.properties").newDataInputStream())
 
-        buildConfigField "String", "MAPBOX_API_KEY", properties.getProperty("apiKey")
-        buildConfigField "String", "CLIENT_ID", properties.getProperty("clientId")
-        buildConfigField "String", "CLIENT_SECRET", properties.getProperty("clientSecret")
-        buildConfigField "String", "FOURSQUARE_API", properties.getProperty("foursquareApi")
+            buildConfigField "String", "MAPBOX_API_KEY", properties.getProperty("MAPBOX_API_KEY")
+            buildConfigField "String", "CLIENT_ID", properties.getProperty("FOURSQUARE_CLIENT_ID")
+            buildConfigField "String", "CLIENT_SECRET", properties.getProperty("FOURSQUARE_CLIENT_SECRET")
+        } else {
+            buildConfigField "String", "MAPBOX_API_KEY", System.getenv('MAPBOX_API_KEY') ?: '""'
+            buildConfigField "String", "CLIENT_ID", System.getenv('FOURSQUARE_CLIENT_ID') ?: '""'
+            buildConfigField "String", "CLIENT_SECRET", System.getenv('FOURSQUARE_CLIENT_SECRET') ?: '""'
+        }
+        buildConfigField "String", "FOURSQUARE_API", '"https://api.foursquare.com/v2/"'
     }
     buildTypes {
         release {
