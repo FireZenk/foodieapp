@@ -90,18 +90,18 @@ class MapPresenterTest {
     @Test
     fun onVenueClick_detailsWillOpen() {
         val venue = singleVenue()
-        given(venuesRepository.findVenue(venue.name))
+        given(venuesRepository.findVenue(venue.id))
                 .willReturn(Single.just(venue))
         given(venuesRepository.downloadFullVenue(venue.id))
                 .willReturn(Single.just(singleFullVenue()))
 
-        presenter reduce actions.openVenue(venue.name)
+        presenter reduce actions.openVenue(venue.id)
 
         verify(screen, times(2)).render(capture(captor))
 
         with(captor.allValues) {
             assertTrue(get(0) is PartialVenueReady)
-            assertTrue((get(0) as PartialVenueReady).venue.name == venue.name)
+            assertTrue((get(0) as PartialVenueReady).venue.id == venue.id)
             assertTrue(get(1) is FullVenueReady)
         }
     }
@@ -109,10 +109,10 @@ class MapPresenterTest {
     @Test
     fun onVenueClick_venueDoesNotExists() {
         val venue = singleVenue()
-        given(venuesRepository.findVenue(venue.name))
+        given(venuesRepository.findVenue(venue.id))
                 .willReturn(Single.error(Exception()))
 
-        presenter reduce actions.openVenue(venue.name)
+        presenter reduce actions.openVenue(venue.id)
 
         verify(screen, times(1)).render(capture(captor))
 

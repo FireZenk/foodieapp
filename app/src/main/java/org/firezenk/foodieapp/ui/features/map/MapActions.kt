@@ -17,7 +17,7 @@ class MapActions @Inject constructor(private val obtainVenues: ObtainVenues,
                                      private val cancelReservation: CancelReservationUC) {
 
     fun loadVenues() = LoadVenues(obtainVenues, obtainCoordinates)
-    fun openVenue(venueName: String) = OpenVenueDetail(obtainPartialVenue, obtainFullVenue, venueName)
+    fun openVenue(venueId: String) = OpenVenueDetail(obtainPartialVenue, obtainFullVenue, venueId)
     fun makeReservation(id: String) = MakeReservation(makeReservation, id)
     fun cancelReservation(id: String) = CancelReservation(cancelReservation, id)
 
@@ -28,7 +28,7 @@ class MapActions @Inject constructor(private val obtainVenues: ObtainVenues,
 
         class OpenVenueDetail(val obtainPartialVenue: ObtainPartialVenue,
                               val obtainFullVenue: ObtainFullVenue,
-                              val venueName: String) : MapAction()
+                              val venueId: String) : MapAction()
 
         class MakeReservation(val makeReservation: MakeReservationUC, val id: String) : MapAction()
         class CancelReservation(val cancelReservation: CancelReservationUC, val id: String) : MapAction()

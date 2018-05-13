@@ -36,7 +36,7 @@ class MapPresenter @Inject constructor() : Presenter<Actions, States>() {
     }
 
     private fun getPartialVenue(action: OpenVenueDetail) {
-        disposables += action.obtainPartialVenue.execute(action.venueName)
+        disposables += action.obtainPartialVenue.execute(action.venueId)
                 .observeOnUI()
                 .subscribe(
                         {

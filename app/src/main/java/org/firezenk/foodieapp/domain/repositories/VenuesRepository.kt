@@ -14,24 +14,18 @@ class VenuesRepository @Inject constructor(private val netDataSource: Network,
     fun findNearbyVenues(lat: Double, lng: Double): Single<List<Venue>> {
         return netDataSource.findNearbyVenues(lat, lng)
                 .flatMapIterable { it -> it }
-                .map {
-                    try {
-                        val dbResult = dbDataSource.findVenue(it.name).blockingGet()
-                        it.copy(reserved = dbResult.reserved)
-                    } catch (e: Exception) {
-                        it
-                    }
-                }
+                .map { replaceReservationValue(it) }
                 .toList()
                 .map { dbDataSource.addAll(it) }
                 .subscribeOnIO()
     }
 
-    fun findVenue(venueName: String): Single<Venue>
-            = dbDataSource.findVenue(venueName).subscribeOnIO()
+    fun findVenue(venueId: String): Single<Venue>
+            = dbDataSource.findVenue(venueId).subscribeOnIO()
 
     fun downloadFullVenue(venueId: String): Single<Venue>
             = netDataSource.getVenue(venueId)
+            .map { replaceReservationValue(it) }
             .map { dbDataSource.updateVenue(it) }
             .subscribeOnIO()
 
@@ -40,4 +34,13 @@ class VenuesRepository @Inject constructor(private val netDataSource: Network,
 
     fun cancelReservation(venueId: String): Completable
             = Completable.fromAction { dbDataSource.cancelReservation(venueId) }.subscribeOnIO()
+
+    private fun replaceReservationValue(it: Venue): Venue {
+        return try {
+            val dbResult = dbDataSource.findVenue(it.id).blockingGet()
+            it.copy(reserved = dbResult.reserved)
+        } catch (e: Exception) {
+            it
+        }
+    }
 }

@@ -15,8 +15,8 @@ interface VenueDao: BaseDao<VenueEntity> {
     }
 
     @Language("RoomSql")
-    @Query("SELECT * FROM $VENUE_TABLE WHERE name = :venueName LIMIT 1")
-    fun findVenue(venueName: String): Single<VenueEntity>
+    @Query("SELECT * FROM $VENUE_TABLE WHERE id LIKE :id LIMIT 1")
+    fun findVenue(id: String): Single<VenueEntity>
 
     @Language("RoomSql")
     @Query("UPDATE $VENUE_TABLE SET reserved = 1 WHERE id LIKE :id")

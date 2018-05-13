@@ -120,7 +120,7 @@ class MapScreen : AppCompatActivity(), Screen<States> {
         mapboxMap = it
         mapboxMap.setOnMarkerClickListener {
             if (it.title != getString(R.string.user_marker_title)) {
-                presenter reduce actions.openVenue(it.title)
+                presenter reduce actions.openVenue(it.snippet)
                 return@setOnMarkerClickListener true
             }
             return@setOnMarkerClickListener false
@@ -164,6 +164,7 @@ class MapScreen : AppCompatActivity(), Screen<States> {
             mapboxMap.addMarker(MarkerOptions()
                     .position(LatLng(it.location.lat, it.location.lng))
                     .setTitle(it.name)
+                    .setSnippet(it.id)
                     .setIcon(icon))
         }
     }
