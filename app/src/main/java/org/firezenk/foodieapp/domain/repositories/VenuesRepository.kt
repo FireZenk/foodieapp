@@ -1,5 +1,6 @@
 package org.firezenk.foodieapp.domain.repositories
 
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.firezenk.foodieapp.data.db.venues.VenueDataSource as Database
 import org.firezenk.foodieapp.data.net.venues.VenueDataSource as Network
@@ -10,11 +11,28 @@ import javax.inject.Inject
 class VenuesRepository @Inject constructor(private val netDataSource: Network,
                                            private val dbDataSource: Database) {
 
-    fun findNearbyVenues(lat: Double, lng: Double): Single<List<Venue>>
-            = netDataSource.findNearbyVenues(lat, lng)
-            .map { dbDataSource.addAll(it) }
-            .subscribeOnIO()
+    fun findNearbyVenues(lat: Double, lng: Double): Single<List<Venue>> {
+        return netDataSource.findNearbyVenues(lat, lng)
+                .flatMapIterable { it -> it }
+                .map {
+                    try {
+                        val dbResult = dbDataSource.findVenue(it.name).blockingGet()
+                        it.copy(reserved = dbResult.reserved)
+                    } catch (e: Exception) {
+                        it
+                    }
+                }
+                .toList()
+                .map { dbDataSource.addAll(it) }
+                .subscribeOnIO()
+    }
 
     fun findVenue(venueName: String): Single<Venue>
             = dbDataSource.findVenue(venueName).subscribeOnIO()
+
+    fun makeReservation(venueId: String): Completable
+            = Completable.fromAction { dbDataSource.makeReservation(venueId) }.subscribeOnIO()
+
+    fun cancelReservation(venueId: String): Completable
+            = Completable.fromAction { dbDataSource.cancelReservation(venueId) }.subscribeOnIO()
 }

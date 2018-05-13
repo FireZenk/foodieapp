@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
@@ -92,6 +93,7 @@ class MapScreen : AppCompatActivity(), Screen<States> {
             is PositionReady -> onPositionReady(state)
             is PointersReady -> onPointersReady(state)
             is VenueReady -> onVenueReady(state)
+            is ReservationChanged -> onReservationChanged(state)
             is ErrorMessage -> onErrorMessage(state)
         }
     }
@@ -159,11 +161,35 @@ class MapScreen : AppCompatActivity(), Screen<States> {
         venueAddress.text = getString(R.string.venue_address, state.venue.location.address,
                 state.venue.location.postalCode, state.venue.location.city)
 
+        changeReservationButtons(state.venue.reserved)
+
+        venueMakeReservation.setOnClickListener {
+            presenter reduce actions.makeReservation(state.venue.id)
+        }
+
+        venueCancelReservation.setOnClickListener {
+            presenter reduce actions.cancelReservation(state.venue.id)
+        }
+
         sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    private fun onReservationChanged(state: ReservationChanged) {
+        changeReservationButtons(state.reserved)
     }
 
     private fun onErrorMessage(state: ErrorMessage) {
         state.e.printStackTrace()
         Snackbar.make(mapView, state.e.message ?: "error", Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun changeReservationButtons(reserved: Boolean) {
+        if (reserved) {
+            venueMakeReservation.visibility = View.GONE
+            venueCancelReservation.visibility = View.VISIBLE
+        } else {
+            venueMakeReservation.visibility = View.VISIBLE
+            venueCancelReservation.visibility = View.GONE
+        }
     }
 }

@@ -1,6 +1,6 @@
 package org.firezenk.foodieapp.data.net
 
-import io.reactivex.Single
+import io.reactivex.Observable
 import org.firezenk.foodieapp.BuildConfig
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -13,5 +13,5 @@ interface FoursquareApi {
                     @Query("client_secret") clientSecret: String = BuildConfig.CLIENT_SECRET,
                     @Query("v") version: String = "20180512",
                     @Query("categoryId") pageNumber: String = "4d4b7105d754a06374d81259")
-            : Single<FoursquareResponse>
+            : Observable<FoursquareResponse>
 }

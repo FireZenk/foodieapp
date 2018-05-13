@@ -18,6 +18,10 @@ class VenueDataSource @Inject constructor(private val venueDao: VenueDao) {
         return venueDao.findVenue(venueName).map { mapVenue(it) }
     }
 
+    fun makeReservation(venueId: String) = venueDao.makeReservation(venueId)
+
+    fun cancelReservation(venueId: String) = venueDao.cancelReservation(venueId)
+
     private fun mapVenueEntity(it: Venue): VenueEntity {
         return VenueEntity(it.id, it.name, false, LocationEntity(it.location.address,
                 it.location.crossStreet, it.location.city, it.location.state,
@@ -28,6 +32,6 @@ class VenueDataSource @Inject constructor(private val venueDao: VenueDao) {
     private fun mapVenue(it: VenueEntity): Venue {
         return Venue(it.id, it.name, Location(it.location.address, it.location.crossStreet,
                 it.location.city, it.location.state, it.location.postalCode, it.location.country,
-                it.location.lat, it.location.lng, it.location.distance))
+                it.location.lat, it.location.lng, it.location.distance), it.reserved)
     }
 }
