@@ -10,7 +10,7 @@ class MapPresenter @Inject constructor() : Presenter<Actions, States>() {
     override fun reduce(action: Actions) {
         when (action) {
             is LoadVenues -> getCoordinates(action)
-            is OpenVenueDetail -> getVenue(action)
+            is OpenVenueDetail -> getPartialVenue(action)
             is MakeReservation -> makeReservation(action)
             is CancelReservation -> cancelReservation(action)
         }
@@ -35,11 +35,24 @@ class MapPresenter @Inject constructor() : Presenter<Actions, States>() {
                         { render(ErrorMessage(it)) })
     }
 
-    private fun getVenue(action: OpenVenueDetail) {
-        disposables += action.obtainVenue.execute(action.venueName)
+    private fun getPartialVenue(action: OpenVenueDetail) {
+        disposables += action.obtainPartialVenue.execute(action.venueName)
                 .observeOnUI()
                 .subscribe(
-                        { render(VenueReady(it)) },
+                        {
+                            render(PartialVenueReady(it))
+                            if (it.extras == null) {
+                                getFullVenue(action, it.id)
+                            }
+                        },
+                        { render(ErrorMessage(it)) })
+    }
+
+    private fun getFullVenue(action: OpenVenueDetail, venueId: String) {
+        disposables += action.obtainFullVenue.execute(venueId)
+                .observeOnUI()
+                .subscribe(
+                        { render(FullVenueReady(it)) },
                         { render(ErrorMessage(it)) })
     }
 
