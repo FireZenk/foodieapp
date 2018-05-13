@@ -16,6 +16,7 @@ import org.firezenk.foodieapp.domain.usecases.ObtainCoordinates
 import org.firezenk.foodieapp.domain.usecases.ObtainVenue
 import org.firezenk.foodieapp.domain.usecases.ObtainVenues
 import org.junit.Assert
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -117,6 +118,21 @@ class MapPresenterTest {
         with(captor.allValues) {
             assertTrue(get(0) is ReservationChanged)
             assertTrue((get(0) as ReservationChanged).reserved)
+        }
+    }
+
+    @Test
+    fun onCancelReservation_theReservationStateWillChange() {
+        val venue = singleVenue()
+        given(venuesRepository.cancelReservation(venue.name)).willReturn(Completable.complete())
+
+        presenter reduce actions.cancelReservation(venue.name)
+
+        verify(screen, times(1)).render(capture(captor))
+
+        with(captor.allValues) {
+            assertTrue(get(0) is ReservationChanged)
+            assertFalse((get(0) as ReservationChanged).reserved)
         }
     }
 
