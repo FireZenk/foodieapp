@@ -93,26 +93,26 @@ class MapPresenterTest {
     @Test
     fun onVenueClick_detailsWillOpen() {
         val venue = singleVenue()
-        given(venuesRepository.findVenue(venue.name))
+        given(venuesRepository.findVenue(venue.id))
                 .willReturn(Single.just(venue))
 
-        presenter reduce actions.openVenue(venue.name)
+        presenter reduce actions.openVenue(venue.id)
 
         verify(screen, times(1)).render(capture(captor))
 
         with(captor.allValues) {
             assertTrue(get(0) is VenueReady)
-            assertTrue((get(0) as VenueReady).venue.name == venue.name)
+            assertTrue((get(0) as VenueReady).venue.id == venue.id)
         }
     }
 
     @Test
     fun onVenueClick_venueDoesNotExists() {
         val venue = singleVenue()
-        given(venuesRepository.findVenue(venue.name))
+        given(venuesRepository.findVenue(venue.id))
                 .willReturn(Single.error(Exception()))
 
-        presenter reduce actions.openVenue(venue.name)
+        presenter reduce actions.openVenue(venue.id)
 
         verify(screen, times(1)).render(capture(captor))
 

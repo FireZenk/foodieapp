@@ -14,8 +14,8 @@ class VenueDataSource @Inject constructor(private val venueDao: VenueDao) {
         return venues
     }
 
-    fun findVenue(venueName: String): Single<Venue> {
-        return venueDao.findVenue(venueName).map { mapVenue(it) }
+    fun findVenue(venueId: String): Single<Venue> {
+        return venueDao.findVenue(venueId).map { mapVenue(it) }
     }
 
     fun makeReservation(venueId: String) = venueDao.makeReservation(venueId)
