@@ -5,5 +5,5 @@ import javax.inject.Inject
 
 class ObtainVenue @Inject constructor(private val repository: VenuesRepository) {
 
-    fun execute(venueName: String) = repository.findVenue(venueName)
+    fun execute(venueId: String) = repository.findVenue(venueId)
 }

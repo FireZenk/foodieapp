@@ -16,7 +16,7 @@ class VenuesRepository @Inject constructor(private val netDataSource: Network,
                 .flatMapIterable { it -> it }
                 .map {
                     try {
-                        val dbResult = dbDataSource.findVenue(it.name).blockingGet()
+                        val dbResult = dbDataSource.findVenue(it.id).blockingGet()
                         it.copy(reserved = dbResult.reserved)
                     } catch (e: Exception) {
                         it
@@ -27,8 +27,8 @@ class VenuesRepository @Inject constructor(private val netDataSource: Network,
                 .subscribeOnIO()
     }
 
-    fun findVenue(venueName: String): Single<Venue>
-            = dbDataSource.findVenue(venueName).subscribeOnIO()
+    fun findVenue(venueId: String): Single<Venue>
+            = dbDataSource.findVenue(venueId).subscribeOnIO()
 
     fun makeReservation(venueId: String): Completable
             = Completable.fromAction { dbDataSource.makeReservation(venueId) }.subscribeOnIO()
