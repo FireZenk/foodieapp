@@ -6,7 +6,7 @@ import javax.inject.Inject
 class VenueMapper @Inject constructor() {
 
     fun mapVenueEntity(it: Venue): VenueEntity {
-        return VenueEntity(it.id, it.name, false, LocationEntity(it.location.address,
+        return VenueEntity(it.id, it.name, it.reserved, LocationEntity(it.location.address,
                 it.location.crossStreet, it.location.city, it.location.state,
                 it.location.postalCode, it.location.country, it.location.lat, it.location.lng,
                 it.location.distance), mapExtrasEntity(it))
