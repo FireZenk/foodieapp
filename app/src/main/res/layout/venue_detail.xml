@@ -6,8 +6,8 @@
     android:id="@+id/bottomSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    app:cardBackgroundColor="@android:color/white"
+    app:cardPreventCornerOverlap="true"
+    app:cardBackgroundColor="@android:color/transparent"
     app:cardElevation="@dimen/cardElevation"
     app:cardCornerRadius="@dimen/cardCornerRadius"
     app:behavior_hideable="true"
@@ -18,17 +18,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/top_rounded_background"
         android:paddingStart="@dimen/expandedMargin"
         android:paddingTop="@dimen/defaultMargin"
         android:paddingEnd="@dimen/expandedMargin"
         android:paddingBottom="@dimen/defaultMargin">
 
-        <TextView
-            android:id="@+id/venueName"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/defaultMargin"
+            app:srcCompat="@drawable/ic_food_pin"/>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Mutenroshi Ramen"
-            style="@style/Venue.Name"/>
+            android:layout_marginTop="@dimen/defaultMargin">
+
+            <ImageView
+                android:id="@+id/venueType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_local_cafe"/>
+
+            <TextView
+                android:id="@+id/venueName"
+                style="@style/Venue.Name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/defaultMargin"
+                android:layout_toEndOf="@+id/venueType"
+                tools:text="Mutenroshi Ramen" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/venueAddress"

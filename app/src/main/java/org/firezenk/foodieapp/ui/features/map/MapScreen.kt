@@ -10,7 +10,6 @@ import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
-import kotlinx.android.synthetic.main.screen_map.*
 import org.firezenk.foodieapp.App.Companion.component
 import org.firezenk.foodieapp.R
 import org.firezenk.foodieapp.ui.extensions.grantPermissions
@@ -105,15 +104,24 @@ class MapScreen : AppCompatActivity(), Screen<States> {
 
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync {
-            mapboxMap = it
-            mapboxMap.setOnMarkerClickListener {
-                if (it.title != getString(R.string.user_marker_title)) {
-                    presenter reduce actions.openVenue(it.title)
-                    return@setOnMarkerClickListener true
-                }
-                return@setOnMarkerClickListener false
-            }
+            initMap(it)
             askForPermissions()
+        }
+    }
+
+    private fun initMap(it: MapboxMap) {
+        mapboxMap = it
+        mapboxMap.setOnMarkerClickListener {
+            if (it.title != getString(R.string.user_marker_title)) {
+                presenter reduce actions.openVenue(it.title)
+                return@setOnMarkerClickListener true
+            }
+            return@setOnMarkerClickListener false
+        }
+        mapboxMap.addOnMapClickListener {
+            if (sheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
         }
     }
 
