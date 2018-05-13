@@ -13,7 +13,7 @@ import io.reactivex.processors.PublishProcessor
 class CoordinatesDataSource @Inject constructor(private val activity: Activity) {
 
     companion object {
-        const val UPDATE_INTERVAL_IN_MILLIS = 10_000L
+        const val UPDATE_INTERVAL_IN_MILLIS = 30_000L
         const val MIN_DISTANCE = 0f
     }
 
