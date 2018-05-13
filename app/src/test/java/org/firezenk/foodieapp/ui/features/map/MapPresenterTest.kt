@@ -15,6 +15,7 @@ import org.firezenk.foodieapp.domain.usecases.ObtainCoordinates
 import org.firezenk.foodieapp.domain.usecases.ObtainVenue
 import org.firezenk.foodieapp.domain.usecases.ObtainVenues
 import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentCaptor
@@ -68,21 +69,43 @@ class MapPresenterTest {
 
     @Test
     fun onMapReady_putsUserAndVenuePointers() {
-        given(coordinatesRepository.subscribeForCoordinates())
-                .willReturn(Flowable.just(Coordinates(43.0, 1.0)))
+        val lat = 43.0
+        val lng = 1.0
 
-        given(venuesRepository.findNearbyVenues(43.0, 1.0))
-                .willReturn(Single.just(listOf(Venue("", "",
-                        Location("", "", "", "", "",
-                                "", 43.0, 1.0, 0f), false))))
+        given(coordinatesRepository.subscribeForCoordinates())
+                .willReturn(Flowable.just(Coordinates(lat, lng)))
+
+        given(venuesRepository.findNearbyVenues(lat, lng))
+                .willReturn(Single.just(listOf(singleVenue())))
 
         presenter reduce actions.loadVenues()
 
         verify(screen, times(2)).render(capture(captor))
 
         with(captor.allValues) {
-            Assert.assertTrue(get(0) is PositionReady)
-            Assert.assertTrue(get(1) is PointersReady)
+            assertTrue(get(0) is PositionReady)
+            assertTrue(get(1) is PointersReady)
         }
     }
+
+    @Test
+    fun onVenueClick_detailsWillOpen() {
+        val venue = singleVenue()
+        given(venuesRepository.findVenue(venue.name))
+                .willReturn(Single.just(venue))
+
+        presenter reduce actions.openVenue(venue.name)
+
+        verify(screen, times(1)).render(capture(captor))
+
+        with(captor.allValues) {
+            assertTrue(get(0) is VenueReady)
+            assertTrue((get(0) as VenueReady).venue.name == venue.name)
+        }
+    }
+
+    private fun singleVenue(): Venue = Venue("111", "MacDonald's",
+            Location("Avinguda de Rio de Janeiro, 42", null, "Barcelona",
+                    "Catalonia", "08016", "Spain", 41.425003,
+                    2.1658096, 1f), false)
 }
